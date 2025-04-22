@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 
-
+import { db } from "../libs/db.js"
 import { UserRole } from "../../generated/prisma/index.js";
 
 export const registerUser = async (req, res) => {
@@ -145,7 +145,17 @@ export const logout = (req, res) => {
 };
 
 export const profile = (req, res) => {
-    res.json({
-        message: "profile endpoint",
-    });
+    try {
+        res.status(200).json({
+            success: true,
+            message: "User authenticated successfully",
+            user: req.user
+        })
+    } catch (error) {
+        console.log("Error checking user: ", error);
+        res.status(500).json({
+            success: false,
+            message: "Error checking user"
+        })
+    }
 };
