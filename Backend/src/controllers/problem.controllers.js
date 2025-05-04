@@ -1,5 +1,6 @@
 import { db } from "../libs/db.js";
-import { submitBatch } from "../libs/problem.lib.js";
+// import { getJudge0LanguageId, submitBatch } from "../libs/judge0.lib.js";
+import { getJudge0LanguageId, submitBatch, poolBatchResults} from "../libs/judge0.lib.js"
 
 export const createProblem = async (req, res) => {
     // Get all the data from the request body
@@ -10,7 +11,7 @@ export const createProblem = async (req, res) => {
         tags,
         examples,
         constraints,
-        tastcases,
+        testCases,
         codeSnippets,
         referenceSolution,
     } = req.body;
@@ -25,11 +26,9 @@ export const createProblem = async (req, res) => {
 
     // put a loop for each reference solution of different languages
     try {
-        for (const [language, solutionCode] of Object.entries(
-            referenceSolution
-        )) {
+        for (const [language, solutionCode] of Object.entries(referenceSolution)) {
             const languageId = getJudge0LanguageId(language);
-
+            
             if (!languageId) {
                 return res.status(403).json({
                     success: false,
@@ -37,7 +36,7 @@ export const createProblem = async (req, res) => {
                 });
             }
 
-            const submissions = tastcases.map(({ input, output }) => ({
+            const submissions = testCases.map(({ input, output }) => ({
                 source_code: solutionCode,
                 language_id: languageId,
                 stdin: input,
@@ -71,17 +70,24 @@ export const createProblem = async (req, res) => {
                     tags,
                     examples,
                     constraints,
-                    tastcases,
+                    testCases,
                     codeSnippets,
                     referenceSolution,
                     userId: req.user.id,
                 },
             });
 
-            return res.status(201).json(newProblem)
+            return res.status(201).json({
+                sucess: true,
+                message: "Message Created Successfully",
+                problem: newProblem,
+            });
         }
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            error: "Error While Creating Problem",
+        });
     }
 };
 

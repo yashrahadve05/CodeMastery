@@ -40,7 +40,7 @@ export const authMiddleware = async (req, res, next) => {
             })
         }
 
-        res.user = user;
+        req.user = user;
         next()
         
     } catch (error) {

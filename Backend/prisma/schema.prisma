@@ -26,12 +26,12 @@ enum Difficutly {
 }
 
 model User {
-  id String @id @default(uuid())
-  name String?
-  email String @unique
-  image String?
-  role UserRole @default(USER)
-  password String
+  id        String   @id @default(uuid())
+  name      String?
+  email     String   @unique
+  image     String?
+  role      UserRole @default(USER)
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -39,19 +39,19 @@ model User {
 }
 
 model Problem {
-  id String @id @default(uuid())
-  title String
+  id          String     @id @default(uuid())
+  title       String
   description String
-  difficulty Difficutly
-  tags String[] // ["tag1", "tag2", "tag3"]
-  userId String
-  examples Json
+  difficulty  Difficutly
+  tags        String[] // ["tag1", "tag2", "tag3"]
+  userId      String
+  examples    Json
   constraints String
-  hints String?
-  editorial String?
+  hints       String?
+  editorial   String?
 
-  tastcases Json //
-  codeSnippets Json
+  testCases         Json //
+  codeSnippets      Json
   referenceSolution Json
 
   createdAt DateTime @default(now())
