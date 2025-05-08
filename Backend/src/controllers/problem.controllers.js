@@ -2,7 +2,7 @@ import { db } from "../libs/db.js";
 import {
     getJudge0LanguageId,
     submitBatch,
-    poolBatchResults,
+    pollBatchResults,
 } from "../libs/judge0.lib.js";
 
 export const createProblem = async (req, res) => {
@@ -51,7 +51,7 @@ export const createProblem = async (req, res) => {
             const submissionResult = await submitBatch(submissions);
             const tokens = submissionResult.map((res) => res.token);
 
-            const results = await poolBatchResults(tokens);
+            const results = await pollBatchResults(tokens);
 
             for (let i = 0; i < results.length; i++) {
                 const result = results[i];
@@ -197,7 +197,7 @@ export const updateProblem = async (req, res) => {
             const submissionResult = await submitBatch(submissions);
             const tokens = submissionResult.map((res) => res.token);
 
-            const results = await poolBatchResults(tokens);
+            const results = await pollBatchResults(tokens);
 
             for (let i = 0; i < results.length; i++) {
                 const result = results[i];
