@@ -84,7 +84,7 @@ export const createProblem = async (req, res) => {
 
             return res.status(201).json({
                 sucess: true,
-                message: "Message Created Successfully",
+                message: "Problem Created Successfully",
                 problem: newProblem,
             });
         }
@@ -195,6 +195,7 @@ export const updateProblem = async (req, res) => {
             }));
 
             const submissionResult = await submitBatch(submissions);
+
             const tokens = submissionResult.map((res) => res.token);
 
             const results = await pollBatchResults(tokens);
@@ -233,7 +234,7 @@ export const updateProblem = async (req, res) => {
 
             return res.status(201).json({
                 sucess: true,
-                message: "Message Created Successfully",
+                message: "Problem Updated Successfully",
                 problem: Problem,
             });
         }

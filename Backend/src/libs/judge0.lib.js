@@ -6,6 +6,7 @@ export const getJudge0LanguageId = (language) => {
         "PYTHON": 71,
         "JAVA": 62,
         "JAVASCRIPT": 63,
+        "C++": 64,
     }
     
     return languageMap[language.toUpperCase()];
@@ -21,7 +22,7 @@ const sleep = (milliSeconds) => {
 }
 */
 
-export const poolBatchResults = async (tokens) => {
+export const pollBatchResults = async (tokens) => {
     // repetedly asks the endpoints ki meine jo kaam diya thaaa wo ho gaya?
     while(true) {
         const {data} = await axios.get(`${process.env.JUDGE0_API_URL}/submissions/batch`, {
@@ -34,7 +35,7 @@ export const poolBatchResults = async (tokens) => {
         const results = data.submissions;
         const isAllDone = results.every(
             // arrow function shorthand
-            (result) => result.status.is !== 1 && result.status.id !== 2
+            (result) => result.status.id !== 1 && result.status.id !== 2
         )
 
         if(isAllDone) {
@@ -51,4 +52,16 @@ export const submitBatch = async (submissions) => {
 
     return data; // [{token}, {token}, {token}] => the data has returned in the form of token
 
+}
+
+export function getLanguageName(LanguageId) {
+    const LANGUAGE_NAMES =  {
+        74: "TypeScript",
+        63: "JavaScript",
+        71: "Python",
+        62: "Java",
+        64: "C++",
+    }
+
+    return LANGUAGE_NAMES[LanguageId] || "Unknown"
 }
