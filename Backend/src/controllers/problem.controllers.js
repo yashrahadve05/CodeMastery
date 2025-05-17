@@ -248,7 +248,7 @@ export const updateProblem = async (req, res) => {
 };
 
 export const deleteProblem = async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     console.log(id);
 
     // if (req.user.role !== "ADMIN") {
@@ -260,22 +260,22 @@ export const deleteProblem = async (req, res) => {
 
     try {
         // check if the problem exists in the database
-        const problem = await db.problem.findUnique({where: {id}})
+        const problem = await db.problem.findUnique({ where: { id } });
         console.log(problem);
 
-        if(!problem) {
+        if (!problem) {
             return res.status(404).json({
                 success: false,
-                error: "Problem not found"
+                error: "Problem not found",
             });
         }
 
         // delete the problem from the database
-        await db.problem.delete({where: {id}})
+        await db.problem.delete({ where: { id } });
 
         res.status(200).json({
             success: true,
-            message: "Problem Deleted Successfully"
+            message: "Problem Deleted Successfully",
         });
     } catch (error) {
         console.log(error);
@@ -289,35 +289,33 @@ export const deleteProblem = async (req, res) => {
 export const getAllProblemsSolvedByUser = async (req, res) => {
     try {
         const problems = await db.problem.findMany({
-            where:{
+            where: {
                 solvedBy: {
-                    some:{
-                        userId: req.user.id
-                    }
-                }
+                    some: {
+                        userId: req.user.id,
+                    },
+                },
             },
             include: {
                 solvedBy: {
                     where: {
-                        userId: req.user.id
-                    }
-                }
-            }
-        })
-
+                        userId: req.user.id,
+                    },
+                },
+            },
+        });
 
         res.status(200).json({
             success: true,
             message: "Problems fetched successfully",
-            problems
-        })
-
+            problems,
+        });
     } catch (error) {
         console.error("Error fetching problems: ", error);
         res.status(500).json({
             success: false,
             message: "Error fetching problems!",
-            error: error
-        })
+            error: error,
+        });
     }
 };

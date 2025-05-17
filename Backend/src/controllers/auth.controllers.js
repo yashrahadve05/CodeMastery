@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 
-import { db } from "../libs/db.js"
+import { db } from "../libs/db.js";
 import { UserRole } from "../../generated/prisma/index.js";
 
 export const registerUser = async (req, res) => {
@@ -52,54 +52,54 @@ export const registerUser = async (req, res) => {
                 email: newUser.email,
                 name: newUser.name,
                 role: newUser.role,
-                image: newUser.image
-            }
+                image: newUser.image,
+            },
         });
     } catch (error) {
         console.log("Error creating user: ", error);
         res.status(500).json({
             success: false,
-            error: "Error creating user"
-        })
+            error: "Error creating user",
+        });
     }
 };
 
 export const loginUser = async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     try {
         const user = await db.user.findUnique({
             where: {
-                email
-            }
-        })
+                email,
+            },
+        });
 
-        if(!user) {
+        if (!user) {
             return res.status(401).json({
                 success: false,
-                message: "User not found"
-            })
+                message: "User not found",
+            });
         }
 
         const isMatched = await bcrypt.compare(password, user.password);
 
-        if(!isMatched) {
+        if (!isMatched) {
             return res.status(401).json({
                 success: false,
-                message: "Invalid Credentials"
-            })
+                message: "Invalid Credentials",
+            });
         }
 
-        const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {
-            expiresIn: '7d'
-        })
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+            expiresIn: "7d",
+        });
 
         res.cookie("jwt", token, {
             httpOnly: true,
             sameSite: "strict",
             secure: process.env.NODE_ENV !== "development",
-            maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
-        })
+            maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        });
 
         res.status(200).json({
             success: true,
@@ -109,17 +109,15 @@ export const loginUser = async (req, res) => {
                 email: user.email,
                 name: user.name,
                 role: user.role,
-                image: user.image
-            }
-        })
-
+                image: user.image,
+            },
+        });
     } catch (error) {
         console.log("Error logging in user: ", error);
         res.status(400).json({
             success: false,
-            message: "Error logging in user"
-        })
-        
+            message: "Error logging in user",
+        });
     }
 };
 
@@ -128,19 +126,19 @@ export const logout = (req, res) => {
         res.clearCookie("jwt", {
             httpOnly: true,
             sameSite: "strict",
-            secure: process.env.NODE_ENV !== "development"
-        })
+            secure: process.env.NODE_ENV !== "development",
+        });
 
         res.status(204).json({
             success: true,
-            message: "User logged out successfully"
-        })
+            message: "User logged out successfully",
+        });
     } catch (error) {
         console.log("Error logging out user: ", error);
         res.status(500).json({
             success: false,
-            message: "Error logging out user"
-        })
+            message: "Error logging out user",
+        });
     }
 };
 
@@ -149,13 +147,13 @@ export const profile = (req, res) => {
         res.status(200).json({
             success: true,
             message: "User authenticated successfully",
-            user: req.user
-        })
+            user: req.user,
+        });
     } catch (error) {
         console.log("Error checking user: ", error);
         res.status(500).json({
             success: false,
-            message: "Error checking user"
-        })
+            message: "Error checking user",
+        });
     }
 };
