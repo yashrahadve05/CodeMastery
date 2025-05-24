@@ -46,7 +46,7 @@ const LoginPage = () => {
 
 
     return (
-        <div className='h-screen grid lg:grid-cols-2'>
+        <div className='h-screen bg-slate-900 grid lg:grid-cols-2'>
             <div className="flex flex-col justify-center items-center p-6 sm:p-12">
                 <div className="w-full max-w-md space-y-8">
                     {/* Logo */}
@@ -62,9 +62,6 @@ const LoginPage = () => {
 
                     {/* Form */}
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
-
-
 
                         {/* Email */}
                         <div className="form-control">
