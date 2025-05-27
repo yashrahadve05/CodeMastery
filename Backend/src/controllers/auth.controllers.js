@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import cookieParser from "cookie-parser";
 
 import { db } from "../libs/db.js";
 import { UserRole } from "../../generated/prisma/index.js";

@@ -32,6 +32,7 @@ export const createProblem = async (req, res) => {
         for (const [language, solutionCode] of Object.entries(
             referenceSolution
         )) {
+            // get the language id from the judge0 library
             const languageId = getJudge0LanguageId(language);
 
             if (!languageId) {

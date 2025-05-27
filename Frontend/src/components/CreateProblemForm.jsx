@@ -16,7 +16,7 @@ const problemSchema = z.object({
     constraints: z.string().min(1, "Constraints are required"),
     hints: z.string().optional(),
     editorial: z.string().optional(),
-    testcases: z
+    testCases: z
         .array(
             z.object({
                 input: z.string().min(1, "Input is required"),
@@ -46,7 +46,7 @@ const problemSchema = z.object({
         PYTHON: z.string().min(1, "Python code snippet is required"),
         JAVA: z.string().min(1, "Java solution is required"),
     }),
-    referenceSolutions: z.object({
+    referenceSolution: z.object({
         JAVASCRIPT: z.string().min(1, "JavaScript solution is required"),
         PYTHON: z.string().min(1, "Python solution is required"),
         JAVA: z.string().min(1, "Java solution is required"),
@@ -66,7 +66,7 @@ const sampledpData = {
         "To reach the nth step, you can either come from the (n-1)th step or the (n-2)th step.",
     editorial:
         "This is a classic dynamic programming problem. The number of ways to reach the nth step is the sum of the number of ways to reach the (n-1)th step and the (n-2)th step, forming a Fibonacci-like sequence.",
-    testcases: [
+    testCases: [
         {
             input: "2",
             output: "2",
@@ -163,7 +163,7 @@ class Main {
   }
 }`,
     },
-    referenceSolutions: {
+    referenceSolution: {
         JAVASCRIPT: `/**
 * @param {number} n
 * @return {number}
@@ -214,8 +214,9 @@ const result = climbStairs(n);
 console.log(result);
 rl.close();
 });`,
-        PYTHON: `class Solution:
-  def climbStairs(self, n: int) -> int:
+        PYTHON:
+            `class Solution:
+    def climbStairs(self, n: int) -> int:
       # Base cases
       if n <= 2:
           return n
@@ -306,11 +307,11 @@ const CreateProblemForm = () => {
 
     const navigation = useNavigate();
 
-    const { register, control, handleSubmit, reset, formState: {errors} } = useForm({
+    const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
         resolver: zodResolver(problemSchema),
         defaultValues: {
             defaultValues: {
-                testcases: [{ input: "", output: "" }],
+                testCases: [{ input: "", output: "" }],
                 tags: [""],
                 examples: {
                     JAVASCRIPT: { input: "", output: "", explanation: "" },
@@ -322,7 +323,7 @@ const CreateProblemForm = () => {
                     PYTHON: "def solution():\n    # Write your code here\n    pass",
                     JAVA: "public class Solution {\n    public static void main(String[] args) {\n        // Write your code here\n    }\n}",
                 },
-                referenceSolutions: {
+                referenceSolution: {
                     JAVASCRIPT: "// Add your reference solution here",
                     PYTHON: "# Add your reference solution here",
                     JAVA: "// Add your reference solution here",
@@ -335,14 +336,14 @@ const CreateProblemForm = () => {
         fields: testCaseFields,
         append: appendTestCase,
         remove: removeTestCase,
-        replace: replaceTestCases,
+        replace: replacetestCases,
     } = useFieldArray({
         control,
         name: "testCases",
     })
 
     const {
-        fields: tagFilds,
+        fields: tagFields,
         append: appendTag,
         remove: removeTag,
         replace: replaceTags,
@@ -351,18 +352,29 @@ const CreateProblemForm = () => {
         name: "tags"
     })
 
-    const { isLoading, setIsLoading } = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (value) => {
-        console.log(value);
-        
+        try {
+            setIsLoading(true);
+            const res = await axiosInstance.post("/problems/create-problem", value);
+            console.log(res.data);
+            toast.success(res.data.message || "Problem Created Successfully 🔥");
+            navigation("/")
+        } catch (error) {
+            console.log("Error while creating problem: ", error);
+            toast.error("Error while creating problem!");
+        } finally {
+            setIsLoading(false);
+        }
+
     }
 
     const loadSampleData = () => {
         const sampleData = sampleType === "DP" ? sampledpData : sampleStringProblem;
 
-        replaceTags(sampleData.tag.map((tag) => tag));
-        replaceTags(sampleData.testCases.map((testcase) => testcase));
+        replaceTags(sampleData.tags?.map((tag) => tag));
+        replaceTags(sampleData.testCases?.map((testcase) => testcase));
 
         // Reset the form with sample data
         reset(sampleData);
@@ -561,13 +573,13 @@ const CreateProblemForm = () => {
                                                     </label>
                                                     <textarea
                                                         className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
-                                                        {...register(`testcases.${index}.input`)}
+                                                        {...register(`testCases.${index}.input`)}
                                                         placeholder="Enter test case input"
                                                     />
-                                                    {errors.testcases?.[index]?.input && (
+                                                    {errors.testCases?.[index]?.input && (
                                                         <label className="label">
                                                             <span className="label-text-alt text-error">
-                                                                {errors.testcases[index].input.message}
+                                                                {errors.testCases[index].input.message}
                                                             </span>
                                                         </label>
                                                     )}
@@ -580,13 +592,13 @@ const CreateProblemForm = () => {
                                                     </label>
                                                     <textarea
                                                         className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
-                                                        {...register(`testcases.${index}.output`)}
+                                                        {...register(`testCases.${index}.output`)}
                                                         placeholder="Enter expected output"
                                                     />
-                                                    {errors.testcases?.[index]?.output && (
+                                                    {errors.testCases?.[index]?.output && (
                                                         <label className="label">
                                                             <span className="label-text-alt text-error">
-                                                                {errors.testcases[index].output.message}
+                                                                {errors.testCases[index].output.message}
                                                             </span>
                                                         </label>
                                                     )}
@@ -596,10 +608,10 @@ const CreateProblemForm = () => {
                                     </div>
                                 ))}
                             </div>
-                            {errors.testcases && !Array.isArray(errors.testcases) && (
+                            {errors.testCases && !Array.isArray(errors.testCases) && (
                                 <div className="mt-2">
                                     <span className="text-error text-sm">
-                                        {errors.testcases.message}
+                                        {errors.testCases.message}
                                     </span>
                                 </div>
                             )}
@@ -666,7 +678,7 @@ const CreateProblemForm = () => {
                                                 </h4>
                                                 <div className="border rounded-md overflow-hidden">
                                                     <Controller
-                                                        name={`referenceSolutions.${language}`}
+                                                        name={`referenceSolution.${language}`}
                                                         control={control}
                                                         render={({ field }) => (
                                                             <Editor
@@ -687,10 +699,10 @@ const CreateProblemForm = () => {
                                                         )}
                                                     />
                                                 </div>
-                                                {errors.referenceSolutions?.[language] && (
+                                                {errors.referenceSolution?.[language] && (
                                                     <div className="mt-2">
                                                         <span className="text-error text-sm">
-                                                            {errors.referenceSolutions[language].message}
+                                                            {errors.referenceSolution[language].message}
                                                         </span>
                                                     </div>
                                                 )}

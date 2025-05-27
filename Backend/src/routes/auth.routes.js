@@ -9,8 +9,6 @@ import { authMiddleware } from "../middleware/auth.middleware.js";
 
 const authRoutes = Router();
 
-// authRoutes.get("/check-auth", authMiddleware, checkAuth);
-
 authRoutes.post("/register", registerUser);
 
 authRoutes.post("/login", loginUser);

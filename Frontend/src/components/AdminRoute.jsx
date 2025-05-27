@@ -2,10 +2,12 @@ import React from 'react'
 import useAuthStore from '../store/useAuthStore'
 import { Loader } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
+import CreateProblemForm from './CreateProblemForm';
 
 const AdminRoute = () => {
 
     const { authUser, isCheckingAuth } = useAuthStore();
+
 
     if(isCheckingAuth) {
         return (
@@ -20,7 +22,9 @@ const AdminRoute = () => {
     }
 
     return (
-        <div>AdminRoute</div>
+        <div>
+            <CreateProblemForm />
+        </div>
     )
 }
 

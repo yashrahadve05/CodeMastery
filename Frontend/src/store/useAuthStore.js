@@ -11,11 +11,12 @@ const useAuthStore = create((set, get) => ({
     checkAuth: async () => {
         set({ isCheckingAuth: true });
         try {
+            // console.log("Login Data", res.data.user);
             const res = await axiosInstance.get("/auth/profile");
-            // console.log("Checkauth response: ", res.data);
+            // console.log("Login Data", res.data.user);
             set({ authUser: res.data.user });
         } catch (error) {
-            console.log("Error checking auth: ", error);
+            // console.log("Error checking auth: ", error);
             set({ authUser: null });
         } finally {
             set({ isCheckingAuth: false });
