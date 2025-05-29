@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import { toast } from "react-hot-toast";
 
-export const useProblemStore = create((set) => ({
+const useProblemStore = create((set) => ({
     problems: [],
-    problem: null,
+    problem: [],
     solvedProblems: [],
     isProblemsLoading: false,
     isProblemLoading: false,
@@ -12,53 +12,53 @@ export const useProblemStore = create((set) => ({
 
     getAllProblems: async () => {
         try {
-            set({isProblemsLoading: true})
+            set({ isProblemsLoading: true });
 
             const res = await axiosInstance.get("/problems/get-all-problems");
 
-            set({problems: res.data.problems});
+            set({ problems: res.data.problems });
 
-            // toast.success("Problems fetched successfully!")
-
+            toast.success("Problems fetched successfully!");
         } catch (error) {
-            console.log("Error while fetching all problems : ", error)
-            toast.error("Error while fetching problems!")
+            console.log("Error while fetching all problems : ", error);
+            toast.error("Error while fetching problems!");
         } finally {
-            set({isProblemsLoading: false})
+            set({ isProblemsLoading: false });
         }
     },
 
-    getProblemById: async () => {
+    getProblemById: async (id) => {
         try {
-            set({isProblemLoading: true});
+            set({ isProblemLoading: true });
 
             const res = await axiosInstance.get(`/problems/get-problem/${id}`);
-            set({problem: res.data.problem});
+            set({ problem: res.data.problem });
+            // console.log("This is problem in useProblemStore", problem);
 
-            toast.success(res.data.message || "Problem fetched successfully!")
+            toast.success(res.data.message);
         } catch (error) {
-            console.log("Error while fetching problem!", error);
-            toast.error("Error while fetching problem!")
+            console.log("Error while fetching solved problem", error);
+            toast.error("Error while fetching solved problem");
         } finally {
-            set({isProblemLoading: false})
+            set({ isProblemLoading: false });
         }
     },
 
     getSolvedProblemByUser: async () => {
         try {
-            set({isSolvedProblemByUserLoading: false});
+            set({ isSolvedProblemByUserLoading: false });
 
-            const res = await axiosInstance.get("/problems/get-solved-problems");
-            set({solvedProblems: res.data.problems})
+            const res = await axiosInstance.get(
+                "/problems/get-solved-problems"
+            );
+            set({ solvedProblems: res.data.problems });
 
             toast.success(res.data.message);
-
         } catch (error) {
             console.log("Error while fetching solved problem by user", error);
-            toast.error("Error while fetching solved problem by user")
+            toast.error("Error while fetching solved problem by user");
         }
     },
 }));
 
-
-
+export default useProblemStore;

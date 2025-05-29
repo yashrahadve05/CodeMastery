@@ -32,20 +32,19 @@ export const executeCode = async (req, res) => {
             stdin: input,
             wait: false,
         }));
-        console.log("Code reached at submissions variable");
 
         // 3. Send this batch of submission to judge0
         const submitResponse = await submitBatch(submissions);
-        console.log("Response: ", submitResponse);
+        // console.log("Response: ", submitResponse);
 
         const tokens = submitResponse.map((res) => res.token);
-        console.log("Tokens: ", tokens);
+        // console.log("Tokens: ", tokens);
 
         // 4. Poll judge0 for results of all submitted test cases
         const results = await pollBatchResults(tokens);
 
-        console.log("------------ Result ------------ ");
-        console.log(results);
+        // console.log("------------ Result ------------ ");
+        // console.log(results);
 
         // 5. Analyse the test case results
         let allPassed = true;
@@ -75,7 +74,7 @@ export const executeCode = async (req, res) => {
             // console.log(`Matched: ${passed}`);
         });
 
-        console.log(detailedResults);
+        // console.log(detailedResults);
 
         // 6. Store submission summary
         const submission = await db.submission.create({

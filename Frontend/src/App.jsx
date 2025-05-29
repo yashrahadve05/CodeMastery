@@ -10,6 +10,7 @@ import useAuthStore from './store/useAuthStore';
 import Layout from "./Layout/Layout"
 import AdminRoute from './components/AdminRoute.jsx';
 import AddProblem from './pages/AddProblem.jsx';
+import ProblemPage from './pages/ProblemPage.jsx';
 
 function App() {
 
@@ -41,10 +42,17 @@ function App() {
         </Route>
 
         <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to={"/"} />} />
+
         <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />} />
+
         <Route element={<AdminRoute />}>
           <Route path='/add-problem' element={authUser ? <AddProblem /> : <Navigate to="/" />} />
         </Route>
+
+        <Route 
+          path='/problem/:id'
+          element={authUser ? <ProblemPage /> : <Navigate to={"/login"} />}
+        />
       </Routes>
     </div>
   )

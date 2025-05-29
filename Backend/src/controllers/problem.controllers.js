@@ -150,7 +150,7 @@ export const getProblemById = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Problem Fetched Successfully",
-            problem: problem,
+            problem
         });
     } catch (error) {
         console.log(error);

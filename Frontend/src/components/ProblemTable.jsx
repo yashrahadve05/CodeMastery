@@ -113,7 +113,6 @@ const ProblemTable = ({ problems }) => {
                         {
                             paginatedProblems.length > 0 ? (
                                 paginatedProblems.map((problem) => {
-                                    console.log("Value of problem.solvedBy:", problem.solvedBy);
                                     const isSolved = problem.solvedBy.some(
                                         (user) => user.userId === authUser?.id
                                     );
