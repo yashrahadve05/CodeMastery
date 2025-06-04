@@ -21,12 +21,14 @@ import {
 import useProblemStore from '../store/useProblemStore';
 import useExecutionStore from '../store/useExecutionStore';
 import { getLanguageId } from '../lib/language';
+import Submission from '../components/Submission';
+import toast from 'react-hot-toast';
 
 const ProblemPage = () => {
 
     const { id } = useParams();
 
-    let submissionCount = 10;
+    // let submissionCount = 10;
     // let isBookmarked = true;
 
     const { getProblemById, problem, isProblemLoading } = useProblemStore();
@@ -36,6 +38,9 @@ const ProblemPage = () => {
     const [selectedLanguage, setSelectedLanguage] = useState("JAVASCRIPT");
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [testCases, setTestCases] = useState();
+
+    console.log("Test Cases",testCases);
+    
 
     const { executeCode, submission, isExecuting } = useExecutionStore();
 
@@ -49,7 +54,7 @@ const ProblemPage = () => {
             setCode(problem.codeSnippets?.[selectedLanguage] || "")
 
             setTestCases(
-                problem.testCases?.map((testcases) => ({
+                problem.testCase?.map((testcases) => ({
                     input: testcases.input,
                     output: testcases.output
                 })) || []
@@ -76,6 +81,10 @@ const ProblemPage = () => {
         } catch (error) {
             console.log("Error executing code", error);
         }
+    }
+
+    const submitResult = () => {
+        toast("Code Submitted Successfully!");
     }
 
     const renderTabContent = () => {
@@ -181,7 +190,7 @@ const ProblemPage = () => {
                             </span>
                             <span className="text-base-content/30">•</span>
                             <Users className="w-4 h-4" />
-                            <span>{submissionCount} Submissions</span>
+                            <span>{problem.submissionCount} Submissions</span>
                             <span className="text-base-content/30">•</span>
                             <ThumbsUp className="w-4 h-4" />
                             <span>95% Success Rate</span>
@@ -293,7 +302,10 @@ const ProblemPage = () => {
                                         {!isExecuting && <Play className="w-4 h-4" />}
                                         Run Code
                                     </button>
-                                    <button className="btn btn-success gap-2">
+                                    <button 
+                                        className="btn btn-success gap-2"
+                                        onClick={submitResult}
+                                    >
                                         Submit Solution
                                     </button>
                                 </div>
@@ -302,7 +314,38 @@ const ProblemPage = () => {
                     </div>
                 </div>
 
-                
+                <div className="card bg-base-100 shadow-xl mt-6">
+                    <div className="card-body">
+                        {submission ? (
+                            <Submission submission={submission} />
+                            // <h1>Submission result</h1>
+                        ) : (
+                            <>
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="text-xl font-bold">Test Cases</h3>
+                                </div>
+                                <div className="overflow-x-auto">
+                                    <table className="table table-zebra w-full">
+                                        <thead>
+                                            <tr>
+                                                <th>Input</th>
+                                                <th>Expected Output</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {/* {testCases.map((testcases, index) => (
+                                                <tr key={index}>
+                                                    <td className="font-mono">{testcases.input}</td>
+                                                    <td className="font-mono">{testcases.output}</td>
+                                                </tr>
+                                            ))} */}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
 
             </div>
         </div>

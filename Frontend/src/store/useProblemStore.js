@@ -33,7 +33,6 @@ const useProblemStore = create((set) => ({
 
             const res = await axiosInstance.get(`/problems/get-problem/${id}`);
             set({ problem: res.data.problem });
-            // console.log("This is problem in useProblemStore", problem);
 
             toast.success(res.data.message);
         } catch (error) {

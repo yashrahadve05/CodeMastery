@@ -15,7 +15,7 @@ const NavBar = () => {
                 <Link to="/" className="flex items-center gap-3 cursor-pointer">
                     <img src="/CodeMastryLogo.png" className="h-18 w-18 bg-primary/20 text-primary border-none px-2 py-2 rounded-full" />
                     <span className="text-lg md:text-2xl font-bold tracking-tight text-white hidden md:block">
-                        CodeMastry
+                        Code<span className='text-primary'>Mastry</span>
                     </span>
                 </Link>
 

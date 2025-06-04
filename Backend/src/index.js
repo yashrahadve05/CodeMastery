@@ -17,14 +17,17 @@ app.use(
     cors({
         origin: "http://localhost:5173",
         methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true
+        credentials: true,
     })
-)
+);
 
-app.get("/test", (req, res) => {
+app.get("/yash", (req, res) => {
     try {
         res.send({
-            message: "Wow app sahi se chal gaya 🔥",
+            imageUrl:
+                "https://media.licdn.com/dms/image/v2/D4D03AQEe-L2jOGgzgg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1720979704506?e=1753920000&v=beta&t=0EAfYx2jaY-jEsAb6TeC7kjCE6mtt54sMd1Ec8OV4RY",
+            message:
+                "This application was completely developed by Yash Kumar Rahadve. 😎🔥",
         });
     } catch (error) {
         console.log(error);
