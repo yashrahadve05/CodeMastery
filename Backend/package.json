@@ -12,7 +12,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.js",
-    "dev": "node src/index.js"
+    "dev": "node src/index.js",
+    "build": "npm install && npm audit fix"
   },
   "dependencies": {
     "@prisma/client": "^6.7.0",
