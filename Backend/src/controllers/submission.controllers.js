@@ -62,7 +62,7 @@ export const getAllSubmissionCountForProblem = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Submissions Fetched successfully!",
-            count: submissionCount,
+            submissionCount,
         });
     } catch (error) {
         console.error("Error while fetching submission count", error);

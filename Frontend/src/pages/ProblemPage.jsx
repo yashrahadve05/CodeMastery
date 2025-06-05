@@ -20,9 +20,11 @@ import {
 
 import useProblemStore from '../store/useProblemStore';
 import useExecutionStore from '../store/useExecutionStore';
+import useSubmissionStore from '../store/useSubmissionStore';
 import { getLanguageId } from '../lib/language';
 import Submission from '../components/Submission';
 import toast from 'react-hot-toast';
+import SubmissionsList from '../components/SubmissionList';
 
 const ProblemPage = () => {
 
@@ -31,29 +33,32 @@ const ProblemPage = () => {
     // let submissionCount = 10;
     // let isBookmarked = true;
 
+    const { submission: submissions, isLoading: isSubmissionLoading, submissionCount, getAllSubmissions, getSubmissionCountForProblem, getSubmissionForProblem } = useSubmissionStore();
+
     const { getProblemById, problem, isProblemLoading } = useProblemStore();
 
     const [code, setCode] = useState();
     const [activeTab, setActiveTab] = useState("description");
     const [selectedLanguage, setSelectedLanguage] = useState("JAVASCRIPT");
     const [isBookmarked, setIsBookmarked] = useState(false);
-    const [testCases, setTestCases] = useState();
+    const [testCase, setTestCase] = useState();
 
-    console.log("Test Cases",testCases);
-    
+    // console.log("Test Cases",testCase);
+
 
     const { executeCode, submission, isExecuting } = useExecutionStore();
 
 
     useEffect(() => {
         getProblemById(id);
+        getSubmissionCountForProblem(id);
     }, [id]);
 
     useEffect(() => {
         if (problem) {
             setCode(problem.codeSnippets?.[selectedLanguage] || "")
 
-            setTestCases(
+            setTestCase(
                 problem.testCase?.map((testcases) => ({
                     input: testcases.input,
                     output: testcases.output
@@ -62,6 +67,15 @@ const ProblemPage = () => {
         }
 
     }, [problem, selectedLanguage]);
+
+    useEffect(() => {
+        if (activeTab === "submissions" && id) {
+            getSubmissionForProblem(id);
+        }
+    }, [activeTab, id])
+
+    console.log("submission", submissions);
+
 
 
     const handleLanguageChange = (e) => {
@@ -143,7 +157,7 @@ const ProblemPage = () => {
                     </div>
                 );
             case "submissions":
-                return <SubmissionsList submissions={submissions} isLoading={isSubmissionsLoading} />;
+                return <SubmissionsList submissions={submissions} isLoading={isSubmissionLoading} />;
             case "discussion":
                 return <div className="p-4 text-center text-base-content/70">No discussions yet</div>;
             case "hints":
@@ -190,7 +204,7 @@ const ProblemPage = () => {
                             </span>
                             <span className="text-base-content/30">•</span>
                             <Users className="w-4 h-4" />
-                            <span>{problem.submissionCount} Submissions</span>
+                            <span>{submissionCount} Submissions</span>
                             <span className="text-base-content/30">•</span>
                             <ThumbsUp className="w-4 h-4" />
                             <span>95% Success Rate</span>
@@ -235,11 +249,11 @@ const ProblemPage = () => {
                                     Description
                                 </button>
                                 <button
-                                    className={`tab gap-2 ${activeTab === "submissions" ? "tab-active" : ""
-                                        }`}
+                                    className={`tab gap-2 ${activeTab === "submissions" ? "tab-active" : ""}`}
                                     onClick={() => setActiveTab("submissions")}
                                 >
                                     <Code2 className="w-4 h-4" />
+                                    {/* {submissionCount} */}
                                     Submissions
                                 </button>
                                 <button
@@ -302,7 +316,7 @@ const ProblemPage = () => {
                                         {!isExecuting && <Play className="w-4 h-4" />}
                                         Run Code
                                     </button>
-                                    <button 
+                                    <button
                                         className="btn btn-success gap-2"
                                         onClick={submitResult}
                                     >
@@ -318,7 +332,6 @@ const ProblemPage = () => {
                     <div className="card-body">
                         {submission ? (
                             <Submission submission={submission} />
-                            // <h1>Submission result</h1>
                         ) : (
                             <>
                                 <div className="flex items-center justify-between mb-6">
@@ -333,7 +346,7 @@ const ProblemPage = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {/* {testCases.map((testcases, index) => (
+                                            {/* {testCase.map((testcases, index) => (
                                                 <tr key={index}>
                                                     <td className="font-mono">{testcases.input}</td>
                                                     <td className="font-mono">{testcases.output}</td>
