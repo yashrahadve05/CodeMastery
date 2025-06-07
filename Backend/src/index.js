@@ -17,7 +17,7 @@ app.use(cookieParser());
 const allowedOrigins = [
     "http://localhost:5173",
     "https://code-mastery-opal.vercel.app",
-    "https://codemastery-kyw9.onrender.com",
+    "https://codemastery-f9ik.onrender.com",
 ];
 app.use(
     cors({
