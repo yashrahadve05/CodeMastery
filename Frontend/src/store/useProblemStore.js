@@ -14,7 +14,12 @@ const useProblemStore = create((set) => ({
         try {
             set({ isProblemsLoading: true });
 
-            const res = await axiosInstance.get("/problems/get-all-problems");
+            const res = await axiosInstance.get("/problems/get-all-problems", {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
 
             set({ problems: res.data.problems });
 
