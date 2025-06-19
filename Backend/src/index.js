@@ -36,7 +36,7 @@ app.use(cookieParser());
 app.use(
     cors({
         origin: [
-            "https://codemasteryalgo.netlify.app/",
+            "https://codemasteryalgo.netlify.app",
             "http://localhost:5173",
             "https://code-mastery-opal.vercel.app",
         ],

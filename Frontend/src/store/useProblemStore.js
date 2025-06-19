@@ -17,7 +17,7 @@ const useProblemStore = create((set) => ({
             const res = await axiosInstance.get("/problems/get-all-problems", {
                 withCredentials: true,
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
 
