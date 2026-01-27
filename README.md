@@ -66,6 +66,8 @@ CodeMastery follows a modern three-tier architecture pattern with clear separati
 ---
 config:
   layout: fixed
+  theme: redux-dark
+  look: neo
 ---
 flowchart TB
  subgraph ClientLayer["Client Layer - React Frontend"]
@@ -117,10 +119,13 @@ flowchart TB
     ProblemService --> PrismaORM
     SubmissionService --> PrismaORM
     AuthLogic --> PrismaORM
-    PlaylistService --> PrismaORM
+    PlaylistService L_PlaylistService_PrismaORM_0@--> PrismaORM
     PrismaORM --> PrismaClient
     PrismaClient --> PostgreSQL
     PostgreSQL --> UserTable & ProblemTable & SubmissionTable & PlaylistTable
+
+
+    L_PlaylistService_PrismaORM_0@{ curve: natural }
 ```
 
 ### API Architecture
