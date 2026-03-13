@@ -27,6 +27,20 @@ export const createProblem = async (req, res) => {
         });
     }
 
+    if (!referenceSolution) {
+        return res.status(400).json({
+            success: false,
+            error: "Reference solution required",
+        });
+    }
+
+    if (!Array.isArray(testCases) || testCases.length === 0) {
+        return res.status(400).json({
+            success: false,
+            error: "Test cases required",
+        });
+    }
+
     try {
         // put a loop for each reference solution of different languages
         for (const [language, solutionCode] of Object.entries(
@@ -60,9 +74,8 @@ export const createProblem = async (req, res) => {
                 if (result.status.id !== 3) {
                     return res.status(400).json({
                         success: false,
-                        error: `Testcase ${
-                            i + 1
-                        } faild for language ${language}`,
+                        error: `Testcase ${i + 1
+                            } faild for language ${language}`,
                     });
                 }
             }
@@ -90,10 +103,12 @@ export const createProblem = async (req, res) => {
             });
         }
     } catch (error) {
-        console.log(error);
+        console.error("Create Problem Error:", error);
+
         return res.status(500).json({
             success: false,
-            error: "Error While Creating Problem",
+            message: error.message || "Error while creating problem",
+            stack: error.stack
         });
     }
 };
@@ -215,9 +230,8 @@ export const updateProblem = async (req, res) => {
                 if (result.status.id !== 3) {
                     return res.status(400).json({
                         success: false,
-                        error: `Testcase ${
-                            i + 1
-                        } faild for language ${language}`,
+                        error: `Testcase ${i + 1
+                            } faild for language ${language}`,
                     });
                 }
             }
