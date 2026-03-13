@@ -63,10 +63,17 @@ export const createProblem = async (req, res) => {
                 expected_output: output,
             }));
 
+            console.log("Reference Solutions:", referenceSolution);
+            console.log("Test Cases:", testCases);
+            console.log("Language:", language);
+            console.log("Language ID:", languageId);
+
             const submissionResult = await submitBatch(submissions);
             const tokens = submissionResult.map((res) => res.token);
 
             const results = await pollBatchResults(tokens);
+
+            console.log(submissionResult)
 
             for (let i = 0; i < results.length; i++) {
                 const result = results[i];
