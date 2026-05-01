@@ -7,8 +7,9 @@ import { db } from "../libs/db.js";
 
 export const executeCode = async (req, res) => {
     try {
-        const { source_code, language_id, stdin, expected_outputs, problemId } =
-            req.body;
+        const { source_code, language_id, stdin, expected_outputs, problemId } = req.body;
+
+        console.log("Request body: ", req.body);
 
         const userId = req.user.id;
 
@@ -26,25 +27,25 @@ export const executeCode = async (req, res) => {
         }
 
         // 2. Prepare each test cases for judge0 batch submission
-        const submissions = stdin.map((input) => ({
+        const submissions = stdin.map((input, i) => ({
             source_code,
             language_id,
             stdin: input,
-            wait: false,
+            expected_output: expected_outputs[i],
         }));
 
         // 3. Send this batch of submission to judge0
         const submitResponse = await submitBatch(submissions);
-        // console.log("Response: ", submitResponse);
+        console.log("Response: ", submitResponse);
 
-        const tokens = submitResponse.map((res) => res.token);
-        // console.log("Tokens: ", tokens);
+        const tokens = submitResponse.map((r) => r.token);
+        console.log("Tokens: ", tokens);
 
         // 4. Poll judge0 for results of all submitted test cases
         const results = await pollBatchResults(tokens);
 
-        // console.log("------------ Result ------------ ");
-        // console.log(results);
+        console.log("------------ Result ------------ ");
+        console.log(results);
 
         // 5. Analyse the test case results
         let allPassed = true;
@@ -67,14 +68,15 @@ export const executeCode = async (req, res) => {
                 time: result.time ? `${result.time} sec` : undefined,
             };
 
-            // console.log(`Testcase #${i+1}`);
-            // console.log(`Input ${stdin[i]}`);
-            // console.log(`Expacted Output for testcase ${expected_output}`);
-            // console.log(`Actual output ${stdout}`);
-            // console.log(`Matched: ${passed}`);
+            console.log("------------ Test Case Result ------------");
+            console.log(`Testcase #${i + 1}`);
+            console.log(`Input ${stdin[i]}`);
+            console.log(`Expacted Output for testcase ${expected_output}`);
+            console.log(`Actual output ${stdout}`);
+            console.log(`Matched: ${passed}`);
         });
 
-        // console.log(detailedResults);
+        console.log(detailedResults);
 
         // 6. Store submission summary
         const submission = await db.submission.create({
@@ -88,10 +90,8 @@ export const executeCode = async (req, res) => {
                 stderr: detailedResults.some((r) => r.stderr)
                     ? JSON.stringify(detailedResults.map((r) => r.stderr))
                     : null,
-                compileOutput: detailedResults.some((r) => r.compile_output)
-                    ? JSON.stringify(
-                          detailedResults.map((r) => r.compile_output)
-                      )
+                compileOutput: detailedResults.some((r) => r.compileOutput)
+                    ? JSON.stringify(detailedResults.map((r) => r.compileOutput))
                     : null,
                 status: allPassed ? "Accepted" : "Wrong Answer",
                 memory: detailedResults.some((r) => r.memory)
@@ -130,7 +130,7 @@ export const executeCode = async (req, res) => {
             stdout: result.stdout,
             expected: result.expected,
             stderr: result.stderr,
-            compileOutput: result.compile_output,
+            compileOutput: result.compileOutput,
             status: result.status,
             memory: result.memory,
             time: result.time,

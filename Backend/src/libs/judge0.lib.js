@@ -55,11 +55,18 @@ export const pollBatchResults = async (tokens) => {
 }
 
 export const submitBatch = async (submissions) => {
-    const { data } = await axios.post(`${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`, {
-        submissions
-    })
+    try {
+        const { data } = await axios.post(`${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`, {
+            submissions
+        })
 
-    return data.tokens; // [{token}, {token}, {token}] => the data has returned in the form of token
+        // [{token}, {token}, {token}] => the data has returned in the form of token
+        console.log("Batch submission response from Judge0: ", data);
+        return data; 
+    } catch (error) {
+        console.error("Error submitting batch to Judge0:", error);
+        return error;
+    }
 
 }
 

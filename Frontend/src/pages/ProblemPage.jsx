@@ -74,7 +74,7 @@ const ProblemPage = () => {
         }
     }, [activeTab, id])
 
-    console.log("submission", submissions);
+    console.log("Submission from problem page", submissions);
 
 
 

@@ -16,6 +16,8 @@ const useExecutionStore = create((set) => ({
         try {
             set({ isExecuting: true });
 
+            console.log("Execution response: ", problemId);
+
             const res = await axiosInstance.post("/execute-code", {
                 source_code,
                 language_id,
@@ -24,12 +26,14 @@ const useExecutionStore = create((set) => ({
                 problemId,
             });
 
+
+
             set({ submission: res.data.submission });
 
             toast(res.data.message || "Code Executed!");
         } catch (error) {
             console.log("Error while executing code", error);
-            toast.error("Faild to execute code!");
+            toast.error("Failed to execute code!");
         } finally {
             set({ isExecuting: false });
         }
