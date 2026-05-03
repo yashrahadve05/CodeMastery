@@ -9,6 +9,7 @@ import {
 const SubmissionsList = ({ submissions, isLoading }) => {
     // Helper function to safely parse JSON strings
     const safeParse = (data) => {
+        if(!data) return [];
         try {
             return JSON.parse(data);
         } catch (error) {
@@ -19,7 +20,11 @@ const SubmissionsList = ({ submissions, isLoading }) => {
 
     // Helper function to calculate average memory usage
     const calculateAverageMemory = (memoryData) => {
-        const memoryArray = safeParse(memoryData).map((m) =>
+        
+        const parsedData = safeParse(memoryData) || [];
+        console.log("Calculating average memory from data: ", parsedData);
+
+        const memoryArray = parsedData.map((m) =>
             parseFloat(m.split(" ")[0])
         );
         if (memoryArray.length === 0) return 0;
@@ -28,12 +33,11 @@ const SubmissionsList = ({ submissions, isLoading }) => {
         );
     };
 
+
     // Helper function to calculate average runtime
     const calculateAverageTime = (timeData) => {
-        const timeArray = safeParse(timeData).map((t) =>
-            parseFloat(t.split(" ")[0])
-        );
-        if (timeArray.length === 0) return 0;
+        const timeArray = safeParse(timeData) || [];
+        console.log("Calculating average time from data: ", timeArray);
         return timeArray.reduce((acc, curr) => acc + curr, 0) / timeArray.length;
     };
 
@@ -59,7 +63,9 @@ const SubmissionsList = ({ submissions, isLoading }) => {
         <div className="space-y-4">
             {submissions.map((submission) => {
                 const avgMemory = calculateAverageMemory(submission.memory);
+                console.log("Average memory for submission ", submission.id, ": ", avgMemory);
                 const avgTime = calculateAverageTime(submission.time);
+                console.log("Average time for submission ", submission.id, ": ", avgTime);
 
                 return (
                     <div

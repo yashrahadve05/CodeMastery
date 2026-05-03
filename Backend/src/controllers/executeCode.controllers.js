@@ -9,7 +9,7 @@ export const executeCode = async (req, res) => {
     try {
         const { source_code, language_id, stdin, expected_outputs, problemId } = req.body;
 
-        console.log("Request body: ", req.body);
+        // console.log("Request body: ", req.body);
 
         const userId = req.user.id;
 
@@ -34,18 +34,19 @@ export const executeCode = async (req, res) => {
             expected_output: expected_outputs[i],
         }));
 
+        // console.log("Submissions: ", submissions);
         // 3. Send this batch of submission to judge0
         const submitResponse = await submitBatch(submissions);
-        console.log("Response: ", submitResponse);
+        // console.log("Response: ", submitResponse);
 
-        const tokens = submitResponse.map((r) => r.token);
-        console.log("Tokens: ", tokens);
+        const tokens = submitResponse.map((item) => item.token);
+        // console.log("Tokens: ", tokens);
 
         // 4. Poll judge0 for results of all submitted test cases
         const results = await pollBatchResults(tokens);
 
-        console.log("------------ Result ------------ ");
-        console.log(results);
+        // console.log("------------ Result ------------ ");
+        // console.log(results);
 
         // 5. Analyse the test case results
         let allPassed = true;
@@ -68,15 +69,15 @@ export const executeCode = async (req, res) => {
                 time: result.time ? `${result.time} sec` : undefined,
             };
 
-            console.log("------------ Test Case Result ------------");
-            console.log(`Testcase #${i + 1}`);
-            console.log(`Input ${stdin[i]}`);
-            console.log(`Expacted Output for testcase ${expected_output}`);
-            console.log(`Actual output ${stdout}`);
-            console.log(`Matched: ${passed}`);
+            // console.log("------------ Test Case Result ------------");
+            // console.log(`Testcase #${i + 1}`);
+            // console.log(`Input ${stdin[i]}`);
+            // console.log(`Expacted Output for testcase ${expected_output}`);
+            // console.log(`Actual output ${stdout}`);
+            // console.log(`Matched: ${passed}`);
         });
 
-        console.log(detailedResults);
+        // console.log(detailedResults);
 
         // 6. Store submission summary
         const submission = await db.submission.create({

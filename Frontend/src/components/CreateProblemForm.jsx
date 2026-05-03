@@ -101,202 +101,210 @@ const sampledpData = {
         },
     },
     codeSnippets: {
-        JAVASCRIPT: `/**
-* @param {number} n
-* @return {number}
-*/
-function climbStairs(n) {
-// Write your code here
-}
+    
+    JAVASCRIPT: `
+    /**
+    * @param {number} n
+    * @return {number}
+    */
+    function climbStairs(n) {
+        // Write your code here
+    }
 
-// Parse input and execute
-const readline = require('readline');
-const rl = readline.createInterface({
-input: process.stdin,
-output: process.stdout,
-terminal: false
-});
+    // Parse input and execute
+    const readline = require('readline');
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+        terminal: false
+    });
 
-rl.on('line', (line) => {
-const n = parseInt(line.trim());
-const result = climbStairs(n);
+    rl.on('line', (line) => {
+        const n = parseInt(line.trim());
+        const result = climbStairs(n);
 
-console.log(result);
-rl.close();
-});`,
-        PYTHON: `class Solution:
-  def climbStairs(self, n: int) -> int:
-      # Write your code here
-      pass
+        console.log(result);
+        rl.close();
+    });`,
 
-# Input parsing
-if __name__ == "__main__":
-  import sys
-  
-  # Parse input
-  n = int(sys.stdin.readline().strip())
-  
-  # Solve
-  sol = Solution()
-  result = sol.climbStairs(n)
-  
-  # Print result
-  print(result)`,
-        JAVA: `import java.util.Scanner;
+    PYTHON: `
+    class Solution:
+        def climbStairs(self, n: int) -> int:
+            # Write your code here
+            pass
 
-class Main {
-  public int climbStairs(int n) {
-      // Write your code here
-      return 0;
-  }
-  
-  public static void main(String[] args) {
-      Scanner scanner = new Scanner(System.in);
-      int n = Integer.parseInt(scanner.nextLine().trim());
-      
-      // Use Main class instead of Solution
-      Main main = new Main();
-      int result = main.climbStairs(n);
-      
-      System.out.println(result);
-      scanner.close();
-  }
-}`,
+    # Input parsing
+    if __name__ == "__main__":
+    import sys
+    
+    # Parse input
+    n = int(sys.stdin.readline().strip())
+    
+    # Solve
+    sol = Solution()
+    result = sol.climbStairs(n)
+    
+    # Print result
+    print(result)`,
+        
+    JAVA: `
+    import java.util.Scanner;
+
+    class Main {
+        public int climbStairs(int n) {
+            // Write your code here
+            return 0;
+        }
+        
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+            int n = Integer.parseInt(scanner.nextLine().trim());
+            
+            // Use Main class instead of Solution
+            Main main = new Main();
+            int result = main.climbStairs(n);
+            
+            System.out.println(result);
+            scanner.close();
+        }
+    }`,
     },
     referenceSolution: {
-        JAVASCRIPT: `/**
-* @param {number} n
-* @return {number}
-*/
-function climbStairs(n) {
-// Base cases
-if (n <= 2) {
-  return n;
-}
+    JAVASCRIPT: `/**
+    * @param {number} n
+    * @return {number}
+    */
+    function climbStairs(n) {
+    // Base cases
+    if (n <= 2) {
+        return n;
+    }
 
-// Dynamic programming approach
-let dp = new Array(n + 1);
-dp[1] = 1;
-dp[2] = 2;
+    // Dynamic programming approach
+    let dp = new Array(n + 1);
+    dp[1] = 1;
+    dp[2] = 2;
 
-for (let i = 3; i <= n; i++) {
-  dp[i] = dp[i - 1] + dp[i - 2];
-}
+    for (let i = 3; i <= n; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
 
-return dp[n];
+    return dp[n];
 
-/* Alternative approach with O(1) space
-let a = 1; // ways to climb 1 step
-let b = 2; // ways to climb 2 steps
+    /* Alternative approach with O(1) space
+    let a = 1; // ways to climb 1 step
+    let b = 2; // ways to climb 2 steps
 
-for (let i = 3; i <= n; i++) {
-  let temp = a + b;
-  a = b;
-  b = temp;
-}
+    for (let i = 3; i <= n; i++) {
+        let temp = a + b;
+        a = b;
+        b = temp;
+    }
 
-return n === 1 ? a : b;
-*/
-}
+    return n === 1 ? a : b;
+    */
+    }
 
-// Parse input and execute
-const readline = require('readline');
-const rl = readline.createInterface({
-input: process.stdin,
-output: process.stdout,
-terminal: false
-});
+    // Parse input and execute
+    const readline = require('readline');
+    const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: false
+    });
 
-rl.on('line', (line) => {
-const n = parseInt(line.trim());
-const result = climbStairs(n);
+    rl.on('line', (line) => {
+    const n = parseInt(line.trim());
+    const result = climbStairs(n);
 
-console.log(result);
-rl.close();
-});`,
-        PYTHON:
-            `class Solution:
-    def climbStairs(self, n: int) -> int:
-      # Base cases
-      if n <= 2:
-          return n
-      
-      # Dynamic programming approach
-      dp = [0] * (n + 1)
-      dp[1] = 1
-      dp[2] = 2
-      
-      for i in range(3, n + 1):
-          dp[i] = dp[i - 1] + dp[i - 2]
-      
-      return dp[n]
-      
-      # Alternative approach with O(1) space
-      # a, b = 1, 2
-      # 
-      # for i in range(3, n + 1):
-      #     a, b = b, a + b
-      # 
-      # return a if n == 1 else b
+    console.log(result);
+    rl.close();
+    });`,
 
-# Input parsing
-if __name__ == "__main__":
-  import sys
-  
-  # Parse input
-  n = int(sys.stdin.readline().strip())
-  
-  # Solve
-  sol = Solution()
-  result = sol.climbStairs(n)
-  
-  # Print result
-  print(result)`,
-        JAVA: `import java.util.Scanner;
+    PYTHON:
+    `class Solution:
+        def climbStairs(self, n: int) -> int:
+        # Base cases
+        if n <= 2:
+            return n
+        
+        # Dynamic programming approach
+        dp = [0] * (n + 1)
+        dp[1] = 1
+        dp[2] = 2
+        
+        for i in range(3, n + 1):
+            dp[i] = dp[i - 1] + dp[i - 2]
+        
+        return dp[n]
+        
+        # Alternative approach with O(1) space
+        # a, b = 1, 2
+        # 
+        # for i in range(3, n + 1):
+        #     a, b = b, a + b
+        # 
+        # return a if n == 1 else b
 
-class Main {
-  public int climbStairs(int n) {
-      // Base cases
-      if (n <= 2) {
-          return n;
-      }
-      
+    # Input parsing
+    if __name__ == "__main__":
+    import sys
+    
+    # Parse input
+    n = int(sys.stdin.readline().strip())
+    
+    # Solve
+    sol = Solution()
+    result = sol.climbStairs(n)
+    
+    # Print result
+    print(result)`,
+
+    JAVA: `import java.util.Scanner;
+
+    class Main {
+    public int climbStairs(int n) {
+        // Base cases
+        if (n <= 2) {
+            return n;
+        }
+        
       // Dynamic programming approach
-      int[] dp = new int[n + 1];
-      dp[1] = 1;
-      dp[2] = 2;
-      
-      for (int i = 3; i <= n; i++) {
-          dp[i] = dp[i - 1] + dp[i - 2];
-      }
-      
-      return dp[n];
-      
-      /* Alternative approach with O(1) space
-      int a = 1; // ways to climb 1 step
-      int b = 2; // ways to climb 2 steps
-      
-      for (int i = 3; i <= n; i++) {
-          int temp = a + b;
-          a = b;
-          b = temp;
-      }
-      
-      return n == 1 ? a : b;
-      */
-  }
-  
-  public static void main(String[] args) {
-      Scanner scanner = new Scanner(System.in);
-      int n = Integer.parseInt(scanner.nextLine().trim());
-      
-      // Use Main class instead of Solution
-      Main main = new Main();
-      int result = main.climbStairs(n);
-      
-      System.out.println(result);
-      scanner.close();
-  }
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 2;
+        
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        
+        return dp[n];
+        
+        /* Alternative approach with O(1) space
+        int a = 1; // ways to climb 1 step
+        int b = 2; // ways to climb 2 steps
+        
+        for (int i = 3; i <= n; i++) {
+            int temp = a + b;
+            a = b;
+            b = temp;
+        }
+        
+        return n == 1 ? a : b;
+        */
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = Integer.parseInt(scanner.nextLine().trim());
+        
+        // Use Main class instead of Solution
+        Main main = new Main();
+        int result = main.climbStairs(n);
+        
+        System.out.println(result);
+        scanner.close();
+    }
 }`,
     },
 };
